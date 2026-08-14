@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#176b3a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ribeira Agro Drone">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Ribeira Agro Drone</title>
+<style>
+:root{--g:#176b3a;--g2:#228b52;--bg:#f4f7f5;--card:#fff;--text:#17231c;--muted:#68756d;--red:#c0392b;--yellow:#c98b00;--line:#dfe7e1}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#0f4d2a,#228b52)}
+.login-card{width:min(430px,100%);background:#fff;border-radius:24px;padding:30px;box-shadow:0 20px 60px #0004}.logo{font-size:42px}.login h1{margin:8px 0}.login p{color:var(--muted)}label{display:block;font-weight:700;margin:14px 0 6px}input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff}.btn{border:0;border-radius:10px;padding:12px 16px;font-weight:700}.primary{background:var(--g);color:#fff}.secondary{background:#e8f2ec;color:var(--g)}.danger{background:#fdecea;color:var(--red)}
+.app{min-height:100vh;display:flex}.sidebar{width:245px;background:#123c27;color:#fff;padding:22px;position:fixed;inset:0 auto 0 0}.brand{font-size:20px;font-weight:800;margin-bottom:28px}.nav button{width:100%;background:transparent;color:#dfeee5;border:0;text-align:left;padding:13px;border-radius:10px;margin:3px 0}.nav button.active,.nav button:hover{background:#ffffff18}.main{margin-left:245px;width:calc(100% - 245px);padding:25px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:20px}.top h2{margin:0}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 3px 12px #123c2708}.metric{font-size:28px;font-weight:800;margin-top:5px}.muted{color:var(--muted);font-size:13px}.section{display:none}.section.active{display:block}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:20px 0 12px}.table-wrap{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:14px}.table{width:100%;border-collapse:collapse;min-width:650px}.table th,.table td{padding:12px;border-bottom:1px solid var(--line);text-align:left}.table th{background:#f0f5f1}.actions{display:flex;gap:6px}.pill{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:700;background:#e8f2ec;color:var(--g)}.pill.warn{background:#fff4d6;color:#8a6500}.pill.bad{background:#fdecea;color:var(--red)}
+.modal{position:fixed;inset:0;background:#0007;display:grid;place-items:center;padding:18px;z-index:20}.modal-card{width:min(560px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:18px;padding:22px}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{background:#eee;border:0;border-radius:50%;width:38px;height:38px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.notice{padding:12px;border-radius:12px;background:#fff4d6;color:#705400;margin:10px 0}.chartbar{height:18px;background:#e8eee9;border-radius:99px;overflow:hidden;margin:8px 0}.chartbar span{display:block;height:100%;background:var(--g);border-radius:99px}
+@media(max-width:900px){.sidebar{display:none}.main{margin:0;width:100%;padding:16px}.grid{grid-template-columns:repeat(2,1fr)}.top{position:sticky;top:0;background:var(--bg);z-index:5;padding:8px 0}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#123c27;z-index:10;padding:6px;gap:3px}.mobile-nav button{flex:1;background:transparent;border:0;color:#fff;font-size:11px;padding:8px}.main{padding-bottom:80px}}
+@media(max-width:520px){.grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<div id="login" class="login">
+  <div class="login-card">
+    <div class="logo">🚁🌱</div><h1>Ribeira Agro Drone</h1>
+    <p>Gestão inteligente do campo</p>
+    <label>E-mail</label><input id="email" type="email" value="admin@ribeiraagro.com">
+    <label>Senha</label><input id="password" type="password" value="123456">
+    <button class="btn primary" style="width:100%;margin-top:18px" onclick="login()">Entrar</button>
+    <p class="muted">Acesso de demonstração: admin@ribeiraagro.com / 123456</p>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+<aside class="sidebar">
+  <div class="brand">🚁 Ribeira Agro Drone</div>
+  <div class="nav">
+    <button data-section="dashboard" class="active">🏠 Dashboard</button>
+    <button data-section="agricultura">🌱 Agricultura</button>
+    <button data-section="pecuaria">🐄 Pecuária</button>
+    <button data-section="drones">🚁 Drones</button>
+    <button data-section="financeiro">💰 Financeiro</button>
+    <button data-section="alertas">🔔 Alertas</button>
+    <button data-section="config">⚙️ Dados</button>
+  </div>
+</aside>
+
+<main class="main">
+<div class="top"><div><h2 id="pageTitle">Dashboard</h2><span class="muted">Vale do Ribeira • Gestão integrada</span></div><button class="btn secondary" onclick="exportar()">⬇️ Backup</button></div>
+
+<section id="dashboard" class="section active">
+  <div class="grid">
+    <div class="card"><span class="muted">Animais</span><div id="mAnimais" class="metric">0</div></div>
+    <div class="card"><span class="muted">Culturas/Talhões</span><div id="mCulturas" class="metric">0</div></div>
+    <div class="card"><span class="muted">Drones</span><div id="mDrones" class="metric">0</div></div>
+    <div class="card"><span class="muted">Alertas abertos</span><div id="mAlertas" class="metric">0</div></div>
+  </div>
+  <div class="grid" style="margin-top:14px">
+    <div class="card"><span class="muted">Receitas</span><div id="mReceitas" class="metric">R$ 0,00</div></div>
+    <div class="card"><span class="muted">Custos</span><div id="mCustos" class="metric">R$ 0,00</div></div>
+    <div class="card"><span class="muted">Saldo</span><div id="mSaldo" class="metric">R$ 0,00</div></div>
+    <div class="card"><span class="muted">Voos registrados</span><div id="mVoos" class="metric">0</div></div>
+  </div>
+  <div class="card" style="margin-top:14px"><h3>Resumo das pastagens</h3><div id="pastagemResumo"></div></div>
+</section>
+
+<section id="agricultura" class="section">
+ <div class="toolbar"><h3>🌱 Agricultura</h3><button class="btn primary" onclick="abrirModal('cultura')">+ Novo talhão</button></div>
+ <div class="table-wrap"><table class="table"><thead><tr><th>Talhão</th><th>Cultura</th><th>Área</th><th>Status</th><th>Ações</th></tr></thead><tbody id="culturasTable"></tbody></table></div>
+</section>
+
+<section id="pecuaria" class="section">
+ <div class="toolbar"><h3>🐄 Pecuária</h3><button class="btn primary" onclick="abrirModal('animal')">+ Novo animal</button></div>
+ <div class="table-wrap"><table class="table"><thead><tr><th>Identificação</th><th>Lote</th><th>Peso</th><th>GMD</th><th>Status</th><th>Ações</th></tr></thead><tbody id="animaisTable"></tbody></table></div>
+</section>
+
+<section id="drones" class="section">
+ <div class="toolbar"><h3>🚁 Drones</h3><div><button class="btn secondary" onclick="abrirModal('voo')">+ Registrar voo</button> <button class="btn primary" onclick="abrirModal('drone')">+ Novo drone</button></div></div>
+ <div class="table-wrap"><table class="table"><thead><tr><th>Drone</th><th>Autonomia</th><th>Bateria</th><th>Status</th><th>Ações</th></tr></thead><tbody id="dronesTable"></tbody></table></div>
+ <h3 style="margin-top:25px">Histórico de voos</h3>
+ <div class="table-wrap"><table class="table"><thead><tr><th>Data</th><th>Drone</th><th>Área</th><th>Duração</th><th>Missão</th><th>Ações</th></tr></thead><tbody id="voosTable"></tbody></table></div>
+</section>
+
+<section id="financeiro" class="section">
+ <div class="toolbar"><h3>💰 Financeiro</h3><button class="btn primary" onclick="abrirModal('financeiro')">+ Novo lançamento</button></div>
+ <div class="table-wrap"><table class="table"><thead><tr><th>Tipo</th><th>Categoria</th><th>Descrição</th><th>Valor</th><th>Data</th><th>Ações</th></tr></thead><tbody id="financeiroTable"></tbody></table></div>
+</section>
+
+<section id="alertas" class="section">
+ <div class="toolbar"><h3>🔔 Alertas</h3><button class="btn primary" onclick="abrirModal('alerta')">+ Novo alerta</button></div>
+ <div class="table-wrap"><table class="table"><thead><tr><th>Data</th><th>Categoria</th><th>Mensagem</th><th>Prioridade</th><th>Status</th><th>Ações</th></tr></thead><tbody id="alertasTable"></tbody></table></div>
+</section>
+
+<section id="config" class="section">
+ <div class="card"><h3>💾 Dados do aplicativo</h3><p>Os registros ficam salvos no armazenamento deste navegador/dispositivo.</p><button class="btn secondary" onclick="exportar()">Exportar backup JSON</button> <button class="btn danger" onclick="resetar()">Apagar todos os dados</button><div class="notice">Para transferir os dados para outro aparelho, exporte o backup. A versão atual é um protótipo PWA local e não usa servidor.</div></div>
+</section>
+</main>
+</div>
+<nav class="mobile-nav hidden" id="mobileNav">
+ <button data-section="dashboard">🏠<br>Início</button><button data-section="agricultura">🌱<br>Agro</button><button data-section="pecuaria">🐄<br>Gado</button><button data-section="drones">🚁<br>Drones</button><button data-section="alertas">🔔<br>Alertas</button>
+</nav>
+
+<div id="modal" class="modal hidden">
+ <div class="modal-card">
+  <div class="modal-head"><h3 id="modalTitle">Novo registro</h3><button class="close" onclick="fecharModal()">×</button></div>
+  <form id="form"></form>
+ </div>
+</div>
+
+<script>
+const DB_KEY='ribeira_agro_drone_db_v2';
+const defaults={propriedades:[],animais:[],culturas:[],drones:[],voos:[],alertas:[],financeiro:[]};
+let banco=JSON.parse(localStorage.getItem(DB_KEY)||'null')||defaults;
+function save(){localStorage.setItem(DB_KEY,JSON.stringify(banco))}
+function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function money(v){return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function add(type,data){const r={id:id(),created:new Date().toISOString(),...data};banco[type].push(r);save();render();return r}
+function update(type,i,data){const n=banco[type].findIndex(x=>x.id===i);if(n>=0){banco[type][n]={...banco[type][n],...data};save();render()}}
+function del(type,i){if(confirm('Excluir este registro?')){banco[type]=banco[type].filter(x=>x.id!==i);save();render()}}
+function exportar(){const blob=new Blob([JSON.stringify(banco,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ribeira-agro-drone-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function resetar(){if(confirm('ATENÇÃO: isso apagará todos os registros deste dispositivo. Continuar?')){banco=JSON.parse(JSON.stringify(defaults));save();render()}}
+function login(){const e=document.getElementById('email').value,p=document.getElementById('password').value;if(e==='admin@ribeiraagro.com'&&p==='123456'){localStorage.setItem('rad_login','1');showApp()}else alert('E-mail ou senha incorretos. Use o acesso de demonstração mostrado na tela.')}
+function showApp(){document.getElementById('login').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('mobileNav').classList.remove('hidden');render()}
+function nav(sec){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));document.getElementById(sec).classList.add('active');document.querySelectorAll('[data-section]').forEach(x=>x.classList.toggle('active',x.dataset.section===sec));document.getElementById('pageTitle').textContent={dashboard:'Dashboard',agricultura:'Agricultura',pecuaria:'Pecuária',drones:'Drones',financeiro:'Financeiro',alertas:'Alertas',config:'Dados'}[sec]}
+document.querySelectorAll('[data-section]').forEach(x=>x.addEventListener('click',()=>nav(x.dataset.section)));
+
+const configs={
+cultura:{title:'Novo talhão',type:'culturas',fields:[['talhao','Talhão','text'],['cultura','Cultura','text'],['area','Área (ha)','number'],['status','Status','select','Boa,Monitorar,Crítica']]},
+animal:{title:'Novo animal',type:'animais',fields:[['identificacao','Identificação','text'],['lote','Lote','text'],['peso','Peso (kg)','number'],['gmd','GMD (kg/dia)','number'],['status','Status','select','Normal,Atenção,Avaliação']]},
+drone:{title:'Novo drone',type:'drones',fields:[['nome','Nome','text'],['autonomia','Autonomia (min)','number'],['bateria','Bateria (%)','number'],['status','Status','select','Disponível,Em voo,Manutenção']]},
+voo:{title:'Registrar voo',type:'voos',fields:[['data','Data','date'],['drone','Drone','text'],['area','Área monitorada (ha)','number'],['duracao','Duração (min)','number'],['missao','Tipo de missão','select','Mapeamento,Pastagem,Rebanho,Cultura,Inspeção']]},
+financeiro:{title:'Novo lançamento',type:'financeiro',fields:[['tipo','Tipo','select','receita,custo'],['categoria','Categoria','text'],['descricao','Descrição','text'],['valor','Valor (R$)','number'],['data','Data','date']]},
+alerta:{title:'Novo alerta',type:'alertas',fields:[['categoria','Categoria','select','Pastagem,Animal,Cultura,Drone,Financeiro,Ambiental'],['mensagem','Mensagem','text'],['prioridade','Prioridade','select','Baixa,Média,Alta'],['status','Status','select','Aberto,Resolvido']]}
+};
+let edit={type:null,id:null};
+function abrirModal(kind,item=null){const c=configs[kind];edit={type:c.type,id:item?.id||null};document.getElementById('modalTitle').textContent=item?'Editar registro':c.title;document.getElementById('form').innerHTML=c.fields.map(([key,label,type,opts])=>`<div class="${type==='text'&&key==='mensagem'?'full':''}"><label>${label}</label>${type==='select'?`<select name="${key}" required>${opts.split(',').map(o=>`<option ${item?.[key]===o?'selected':''}>${o}</option>`).join('')}</select>`:`<input name="${key}" type="${type}" value="${esc(item?.[key]??'')}" required></div>`).join('')+`<div class="form-actions full"><button type="button" class="btn secondary" onclick="fecharModal()">Cancelar</button><button class="btn primary">Salvar</button></div>`;document.getElementById('form').onsubmit=salvarForm;document.getElementById('modal').classList.remove('hidden')}
+function fecharModal(){document.getElementById('modal').classList.add('hidden')}
+function salvarForm(ev){ev.preventDefault();const data=Object.fromEntries(new FormData(ev.target).entries());if(edit.id)update(edit.type,edit.id,data);else add(edit.type,data);fecharModal()}
+function btns(type,item){return `<div class="actions"><button class="btn secondary" onclick='abrirModal("${type}",${JSON.stringify(item).replace(/'/g,"&#39;")})'>Editar</button><button class="btn danger" onclick="del('${type}','${item.id}')">Excluir</button></div>`}
+function render(){
+ document.getElementById('mAnimais').textContent=banco.animais.length;document.getElementById('mCulturas').textContent=banco.culturas.length;document.getElementById('mDrones').textContent=banco.drones.length;document.getElementById('mVoos').textContent=banco.voos.length;document.getElementById('mAlertas').textContent=banco.alertas.filter(x=>x.status!=='Resolvido').length;
+ const rec=banco.financeiro.filter(x=>x.tipo==='receita').reduce((s,x)=>s+Number(x.valor||0),0),cus=banco.financeiro.filter(x=>x.tipo==='custo').reduce((s,x)=>s+Number(x.valor||0),0);document.getElementById('mReceitas').textContent=money(rec);document.getElementById('mCustos').textContent=money(cus);document.getElementById('mSaldo').textContent=money(rec-cus);
+ document.getElementById('culturasTable').innerHTML=banco.culturas.map(x=>`<tr><td>${esc(x.talhao)}</td><td>${esc(x.cultura)}</td><td>${esc(x.area)} ha</td><td><span class="pill">${esc(x.status)}</span></td><td>${btns('culturas',x)}</td></tr>`).join('')||'<tr><td colspan="5">Nenhum talhão cadastrado.</td></tr>';
+ document.getElementById('animaisTable').innerHTML=banco.animais.map(x=>`<tr><td>${esc(x.identificacao)}</td><td>${esc(x.lote)}</td><td>${esc(x.peso)} kg</td><td>${esc(x.gmd)} kg/dia</td><td><span class="pill">${esc(x.status)}</span></td><td>${btns('animais',x)}</td></tr>`).join('')||'<tr><td colspan="6">Nenhum animal cadastrado.</td></tr>';
+ document.getElementById('dronesTable').innerHTML=banco.drones.map(x=>`<tr><td>${esc(x.nome)}</td><td>${esc(x.autonomia)} min</td><td>${esc(x.bateria)}%</td><td><span class="pill">${esc(x.status)}</span></td><td>${btns('drones',x)}</td></tr>`).join('')||'<tr><td colspan="5">Nenhum drone cadastrado.</td></tr>';
+ document.getElementById('voosTable').innerHTML=banco.voos.map(x=>`<tr><td>${esc(x.data)}</td><td>${esc(x.drone)}</td><td>${esc(x.area)} ha</td><td>${esc(x.duracao)} min</td><td>${esc(x.missao)}</td><td>${btns('voos',x)}</td></tr>`).join('')||'<tr><td colspan="6">Nenhum voo registrado.</td></tr>';
+ document.getElementById('financeiroTable').innerHTML=banco.financeiro.map(x=>`<tr><td><span class="pill ${x.tipo==='custo'?'bad':''}">${esc(x.tipo)}</span></td><td>${esc(x.categoria)}</td><td>${esc(x.descricao)}</td><td>${money(x.valor)}</td><td>${esc(x.data)}</td><td>${btns('financeiro',x)}</td></tr>`).join('')||'<tr><td colspan="6">Nenhum lançamento.</td></tr>';
+ document.getElementById('alertasTable').innerHTML=banco.alertas.map(x=>`<tr><td>${esc(x.created?.slice(0,10))}</td><td>${esc(x.categoria)}</td><td>${esc(x.mensagem)}</td><td>${esc(x.prioridade)}</td><td><span class="pill ${x.status==='Aberto'?'warn':''}">${esc(x.status)}</span></td><td>${btns('alertas',x)}</td></tr>`).join('')||'<tr><td colspan="6">Nenhum alerta.</td></tr>';
+ const total=banco.culturas.reduce((s,x)=>s+Number(x.area||0),0);document.getElementById('pastagemResumo').innerHTML=`<p>Área cadastrada em talhões: <b>${total.toFixed(2)} ha</b></p><div class="chartbar"><span style="width:${Math.min(total?Math.max(total/5,5):0,100)}%"></span></div><p class="muted">Use os registros de agricultura e pecuária para construir indicadores reais da propriedade.</p>`;
+}
+function init(){if(localStorage.getItem('rad_login')==='1')showApp();else{document.getElementById('login').classList.remove('hidden');document.getElementById('app').classList.add('hidden');}render()}
+init();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(console.error);
+</script>
+</body>
+</html>
